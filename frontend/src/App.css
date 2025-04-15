@@ -1,38 +1,147 @@
-.App {
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #007bff;
+  padding: 15px 20px;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar-logo {
+  margin-left: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Main Container */
+.app-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin-top: 40px;
+  padding: 20px;
+}
+
+/* Card */
+.card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Title */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Input */
+.input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #007bff;
+}
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Button */
+.button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Result */
+.result {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.result a {
+  color: #007bff;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.result a:hover {
+  text-decoration: underline;
+}
+
+/* Copy Button */
+.copy-button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #28a745;
   color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.copy-button:hover {
+  background-color: #218838;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.copy-success {
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .navbar {
+    font-size: 18px;
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .card {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .input, .button {
+    font-size: 14px;
+    padding: 10px;
   }
 }
