@@ -1,76 +1,74 @@
-import express from 'express';  
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { nanoid } from 'nanoid';
-dotenv.config();
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const AuthRouter = require('./Routers/AuthRouter'); 
+const ProductRouter = require('./Routers/ProductRouter'); // Import the ProductRouter
+const Shorten = require('./Routers/Shorten'); // Import the Shorten router
 
+const UrlModel = require('./Models/Url').UrlModel; // Import the UrlModel
 
+dotenv.config(); // Load environment variables from .env file
 
+require('./Models/db'); // Import the database connection
 
 const app = express();
 
+const PORT = process.env.PORT || 8080;
+;
+
+app.get('/hello', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-//database connection
+app.use('/auth', AuthRouter);
+app.use('/products', ProductRouter); 
+app.use ('/shorten',Shorten);
 
-mongoose.connect(process.env.DATABASE_URL).then(() => {
-    console.log('Database connected successfully');
-}).catch((err) => {     
-    console.log('Database connection failed', err);
+app.get("/:shortUrl", async (req, res) => {
+  const { shortUrl } = req.params;
+
+  console.log("Short URL requested:", shortUrl);
+  console.log("Request headers:", req.headers);
+  console.log("Request body:", req.body);
+  console.log("Request params:", req.params);
+  console.log("Request query:", req.query);
+
+  try {
+      const urlDoc = await UrlModel.findOne({ shortUrl });
+
+      if (!urlDoc) {
+          return res.status(404).json({ message: "Short URL not found" });
+      }
+
+      res.redirect(urlDoc.originalUrl);
+  } catch (error) {
+      console.error("Error retrieving URL:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-const urlSchema = new mongoose.Schema({
-    originalUrl: { type: String, required: true },
-    shortUrl: { type: String, required: true, unique: true },
-    clicks: { type: Number, default: 0 },  
+app.get('/urls/:email', async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const urls = await UrlModel.find({ email });
+    res.json(urls);
+  } catch (error) {
+    console.error("Error fetching URLs:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-const Url = mongoose.model('Url', urlSchema);
-
-// Routes
-app.post('/api/short', async (req, res) => {
-    console.log(req.body);
-    const { originalUrl } = req.body;
-    const shortUrl = nanoid(6); // Generate a unique short URL
-    if (!originalUrl) {
-        return res.status(400).json({ error: 'Original URL is required' });
-    }
-
-    try {
-        const newUrl = new Url({ originalUrl, shortUrl });
-        await newUrl.save();
-        res.status(201).json({ originalUrl, shortUrl });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create short URL' });
-    }
-}
-);
-
-app.get('/:shortUrl', async (req, res) => {
-    try{
-        const { shortUrl } = req.params;
-        const url= await Url.findOne({ shortUrl });
-        if(url){
-            url.clicks++;
-            await url.save();
-            return res.redirect(url.originalUrl);
-        }
-        else{
-            return res.status(404).json({ error: 'URL not found' });
-        }
-    }
-    catch (error) {
-        res.status(500).json({ error: 'Failed to redirect' });
-    }
-}); 
-
-
-app.get('/', function (req, res)  {   
-    res.send("Hello from the 'root' URL")
+app.get('/api', (req, res) => {
+  res.send('API is working!');
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on port ${process.env.PORT || 3000}`);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

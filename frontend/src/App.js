@@ -1,94 +1,34 @@
-import React, { useState } from 'react';
-import axios from 'axios';
 import './App.css';
+import {Navigate , Route ,Routes ,useLocation , useNavigate } from 'react-router-dom';
+import { useState  } from 'react';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Home from './pages/Home';
+import RefreshHandler from './RefreshHandler';
+import Shortener from './pages/Shortener';
+import MyUrls from './pages/MyUrls';
+
 
 function App() {
-  const [originalUrl, setOriginalUrl] = useState('');
-  const [shortUrl, setShortUrl] = useState('');
-  const [copySuccess, setCopySuccess] = useState('');
-  const [error, setError] = useState('');
+ const [isAuthenticated , setIsAuthenticated] = useState(false);
 
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
-  const handleSubmit = () => {
-    setError('');
-    setShortUrl('');
-    setCopySuccess('');
-
-    if (!isValidUrl(originalUrl)) {
-      setError('Please enter a valid URL.');
-      return;
-    }
-
-    axios.post("http://localhost:3000/api/short", { originalUrl })
-      .then((response) => {
-        setShortUrl(response.data.shortUrl);
-      })
-      .catch(() => {
-        setError("There was an error shortening the URL.");
-      });
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(`http://localhost:3000/${shortUrl}`);
-    setCopySuccess('Copied!');
-    setTimeout(() => setCopySuccess(''), 2000);
-  };
-
+ const PrivateRoute = ({ element }) => {
+  return isAuthenticated ? element : <Navigate to="/shortener" />;
+ }
+  
   return (
-    <div>
-      <nav className="navbar">
-        <div className="navbar-logo">URL Shortener</div>
-      </nav>
+    <div className="App">
+      <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
+      <Routes>
+        <Route path='/Shortener' element={<Shortener />} />
+        <Route path='/' element= {<Navigate to = "shortener" />} />
+        <Route path="/myurls" element={<MyUrls />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/home'  element={ <PrivateRoute element={ <Home /> } />}  />
 
-      <div className="app-container">
-        <div className="card">
-          <h1 className="title">Shorten Your URL</h1>
-
-          <input
-            value={originalUrl}
-            onChange={(e) => setOriginalUrl(e.target.value)}
-            required
-            type="text"
-            name="originalUrl"
-            placeholder="Enter URL to shorten"
-            className="input"
-          />
-
-          {error && <p className="error">{error}</p>}
-
-          <button
-            onClick={handleSubmit}
-            type="submit"
-            className="button"
-          >
-            Shorten
-          </button>
-
-          {shortUrl && (
-            <div className="result">
-              <p>Short URL:</p>
-              <a
-                href={`http://localhost:3000/${shortUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                http://localhost:3000/{shortUrl}
-              </a>
-              <button onClick={handleCopy} className="copy-button">Copy</button>
-              {copySuccess && <p className="copy-success">{copySuccess}</p>}
-            </div>
-          )}
-        </div>
+      </Routes>
       </div>
-    </div>
   );
 }
 

@@ -1,0 +1,100 @@
+/* Auth Container */
+.auth-container {
+    max-width: 400px;
+    margin: 60px auto;
+    background-color: #fff;
+    padding: 30px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title */
+  .auth-container h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  /* Form Group */
+  .auth-container form div {
+    margin-bottom: 20px;
+  }
+  
+  .auth-container label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  
+  .auth-container input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  .auth-container input:focus {
+    border-color: #007bff;
+  }
+  
+  /* Submit Button */
+  .auth-container button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .auth-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Link Text */
+  .auth-container span {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .auth-container span a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 5px;
+  }
+  
+  .auth-container span a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .auth-container {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .auth-container h1 {
+      font-size: 22px;
+    }
+  
+    .auth-container input,
+    .auth-container button[type="submit"] {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  
